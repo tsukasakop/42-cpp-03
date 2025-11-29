@@ -1,51 +1,98 @@
 #include "ClapTrap.hpp"
 #include <iostream>
+#include <iomanip>
 
 int main(void) {
-	std::cout << "=== Creating ClapTraps ===" << std::endl;
-	ClapTrap clap1("CT-01");
-	ClapTrap clap2("CT-02");
-	ClapTrap clap3("CT-03");
-	ClapTrap clap4("CT-04");
-	
-	std::cout << "\n=== Testing attacks ===" << std::endl;
-	clap1.attack("Target");
-	clap1.attack("");
-	
-	
-	std::cout << "\n=== Testing repair ===" << std::endl;
-	clap1.beRepaired(5);
-	clap1.beRepaired(0);
-	clap1.beRepaired(-5);
-	std::cout << "\n=== Testing damage ===" << std::endl;
-	clap1.takeDamage(5);
-	clap1.takeDamage(0);
-	clap1.takeDamage(UINT_MAX);
-
-	std::cout << "\n=== Testing actions on no energy ===" << std::endl;
-	for (int i = 0; i < 10; i++) {
-		std::cout << "Attack " << i << ": ";
-		clap2.attack("Target");
+	{
+		std::cout << "\n=== CASE0: Testing constructor/destructor ===" << std::endl;
+		{
+			std::cout << "\n-- Default constructor --" << std::endl;
+			ClapTrap defaultTrap;
+		}
+		{
+			std::cout << "\n-- Parameterized constructor --" << std::endl;
+			ClapTrap trap("CASE0");
+		}
+		{
+			std::cout << "\n-- Copy constructor --" << std::endl;
+			ClapTrap trap("CASE0-COPY");
+			{
+				ClapTrap copyTrap(trap);
+			}
+		}
+		{
+			std::cout << "\n-- Copy assignment operator --" << std::endl;
+			ClapTrap trap("CASE0-ASSIGN");
+			{
+				ClapTrap copyTrap("CASE0-DUMMY");
+				copyTrap = trap;
+			}
+		}
 	}
-	clap2.attack("Target");
-	clap2.beRepaired(5);
-	clap2.takeDamage(5);
-	
-	std::cout << "\n=== Testing actions on death ===" << std::endl;
-	clap3.takeDamage(20);
-	clap3.attack("Target");
-	clap3.beRepaired(5);
-	clap3.takeDamage(5);
-	
-	std::cout << "\n=== Testing actions on death and no energy ===" << std::endl;
-	for (int i = 0; i < 10; i++) {
-		clap4.attack("Target");
-	}
-	clap4.takeDamage(20);
-	clap4.attack("Target");
-	clap4.beRepaired(5);
-	clap4.takeDamage(5);
+	{
+		// Arrange
+		std::cout.setstate(std::ios_base::failbit);
+		ClapTrap trap("CASE1");
 
-	std::cout << "\n=== Destruction ===" << std::endl;
+		// Act
+		std::cout.clear();
+		std::cout << "\n=== CASE1: Testing standard actions available ===" << std::endl;
+		trap.attack("Target");
+		trap.attack("");
+		trap.beRepaired(5);
+		trap.beRepaired(0);
+		trap.beRepaired(UINT_MAX);
+		trap.takeDamage(5);
+		trap.takeDamage(0);
+		trap.takeDamage(UINT_MAX);
+		std::cout.setstate(std::ios_base::failbit);
+	}
+	{
+		// Arrange
+		ClapTrap trap("CASE2");
+		for (int i = 0; i < 50; i++) {
+			std::cout << "Attack " << std::setw(2) << i << ": ";
+			trap.attack("Target");
+		}
+
+		// Act
+		std::cout.clear();
+		std::cout << "\n=== CASE2: Testing actions on no energy ===" << std::endl;
+		trap.attack("Target");
+		trap.beRepaired(5);
+		trap.takeDamage(5);
+		std::cout.setstate(std::ios_base::failbit);
+	}	
+	{
+		// Arrange
+		ClapTrap trap("CASE3");
+		trap.takeDamage(UINT_MAX);
+
+		// Act
+		std::cout.clear();
+		std::cout << "\n=== CASE3: Testing actions on death ===" << std::endl;
+		trap.attack("Target");
+		trap.beRepaired(5);
+		trap.takeDamage(5);
+		std::cout.setstate(std::ios_base::failbit);
+	}
+	{
+
+		// Arrange
+		ClapTrap trap("CASE4");
+		for (int i = 0; i < 50; i++) {
+			std::cout << "Attack " << std::setw(2) << i << ": ";
+			trap.attack("Target");
+		}
+		trap.takeDamage(UINT_MAX);
+
+		// Act
+		std::cout.clear();
+		std::cout << "\n=== CASE4: Testing actions on death and no energy ===" << std::endl;
+		trap.attack("Target");
+		trap.beRepaired(5);
+		trap.takeDamage(5);
+		std::cout.setstate(std::ios_base::failbit);
+	}
 	return 0;
 }
