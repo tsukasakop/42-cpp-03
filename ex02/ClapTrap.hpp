@@ -4,6 +4,8 @@
 # include <string>
 
 class ClapTrap {
+	const static unsigned int maxHitPoints = UINT_MAX;
+
 protected:
 	std::string name;
 	unsigned int hitPoints;
