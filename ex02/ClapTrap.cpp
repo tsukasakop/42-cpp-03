@@ -2,7 +2,7 @@
 #include <iostream>
 
 ClapTrap::ClapTrap(void) : name("Default"), hitPoints(10), energyPoints(10), attackDamage(0) {
-	std::cout << "ClapTrap default constructor called" << std::endl;
+	std::cout << "ClapTrap " << this->name << " constructor called" << std::endl;
 }
 
 ClapTrap::ClapTrap(std::string name) : name(name), hitPoints(10), energyPoints(10), attackDamage(0) {
@@ -71,8 +71,13 @@ void ClapTrap::beRepaired(unsigned int amount) {
 		return;
 	}
 	
+	unsigned int amountToRepair = amount;
+	if (amount > maxHitPoints || maxHitPoints - amount < this->hitPoints) {
+		std::cerr << "[WARN] ClapTrap: beRepaired: called with too large repair amount, setting hit points to maximum! (=" << maxHitPoints << ")" << std::endl;
+		amountToRepair = maxHitPoints - this->hitPoints;
+	}
 	this->energyPoints--;
-	this->hitPoints += amount;
+	this->hitPoints += amountToRepair;
 	std::cout << "ClapTrap " << this->name << " is repaired for " << amount 
 	          << " hit points! (" << this->hitPoints << " HP now)" << std::endl;
 }
