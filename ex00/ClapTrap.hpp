@@ -2,6 +2,7 @@
 # define CLAPTRAP_HPP
 
 # include <string>
+# include <climits>
 
 class ClapTrap {
 	const static unsigned int maxHitPoints = UINT_MAX;
